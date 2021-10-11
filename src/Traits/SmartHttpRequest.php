@@ -47,7 +47,7 @@ trait SmartHttpRequest
 //            static::$default, //TODO
             $defaultOptions,
             ['handler' => $this->getHandlerStack()],
-            ['debug' => boolval($this->app->config['http.debug'])]
+            ['debug' => boolval($this->app->offsetGet('config')['http.debug'])]
 //            ['on_stats' => function (TransferStats $stats) {
 //                echo $stats->getEffectiveUri() . "\n";
 //                echo $stats->getTransferTime() . "\n";
