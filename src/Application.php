@@ -4,6 +4,7 @@
 namespace Beyond\SmartHttp;
 
 
+use Beyond\SmartHttp\Test\Demo\Demo;
 use Psr\Log\LoggerInterface;
 use Beyond\SmartHttp\Kernel\ServiceContainer;
 use Beyond\SmartHttp\Test\Demo\DemoProvider;
@@ -35,5 +36,13 @@ class Application extends ServiceContainer
         $this->initProvider();
 
         parent::__construct($config, $values);
+    }
+
+    /**
+     * @return Demo
+     */
+    public function demo()
+    {
+        return $this->offsetGet('demo');
     }
 }

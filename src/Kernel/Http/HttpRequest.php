@@ -83,7 +83,7 @@ class HttpRequest
     public function request($url, $method = 'POST', array $options = [])
     {
         if (empty($this->getMiddleware())) {
-            $this->registerDefaultMiddleware();
+            $this->registerMiddleware();
         }
 
         return $this->performRequest($url, $method, $options);
@@ -131,13 +131,21 @@ class HttpRequest
     }
 
     /**
+     * 注册中间件
+     */
+    protected function registerMiddleware()
+    {
+        $this->registerDefaultMiddleware();
+    }
+
+    /**
      * 注册默认中间件
      */
-    protected function registerDefaultMiddleware()
+    private function registerDefaultMiddleware()
     {
-//        if ($this->config->get('http.logging', false)) {
-//            $this->pushMiddleware($this->logMiddleware(), 'log');
-//        }
+        if ($this->config->get('http.logging', false)) {
+            $this->pushMiddleware($this->logMiddleware(), 'log');
+        }
     }
 
     /**

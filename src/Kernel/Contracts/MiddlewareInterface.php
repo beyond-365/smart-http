@@ -15,16 +15,7 @@ interface MiddlewareInterface
      *
      * @return string
      */
-    public function getAccessName();
-
-    /**
-     * 中间件具体的实现
-     *
-     * @param RequestInterface $request
-     *
-     * @return RequestInterface
-     */
-    public function before(RequestInterface $request);
+    public static function getAccessName();
 
     /**
      * 键名
