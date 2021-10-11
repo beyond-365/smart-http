@@ -6,7 +6,9 @@
         "ext-json": "*",
         "beyond/supports": "^0.1.0",
         "pimple/pimple": "^3.4",
-        "symfony/http-kernel": "^5.3"
+        "symfony/http-kernel": "^5.3",
+        "ext-simplexml": "*",
+        "ext-libxml": "*"
     },
     "autoload": {
         "psr-4": {
@@ -20,5 +22,8 @@
             "name": "beyond",
             "email": "gobeyond@petalmail.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "monolog/monolog": "2"
+    }
 }
