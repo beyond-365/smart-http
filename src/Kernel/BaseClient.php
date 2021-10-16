@@ -8,7 +8,6 @@ use Beyond\SmartHttp\Kernel\Exceptions\ResourceNotFoundException;
 use Beyond\SmartHttp\Kernel\Exceptions\ServiceInvalidException;
 use Beyond\SmartHttp\Kernel\Exceptions\ValidationException;
 use Beyond\SmartHttp\Kernel\Http\HttpRequest;
-use Beyond\SmartHttp\Test\Middleware\SignMiddleware;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -23,8 +22,6 @@ abstract class BaseClient extends HttpRequest
     public function registerMiddleware()
     {
         parent::registerMiddleware();
-
-        $this->pushMiddlewareByKey(SignMiddleware::getAccessName());
     }
 
     /**
