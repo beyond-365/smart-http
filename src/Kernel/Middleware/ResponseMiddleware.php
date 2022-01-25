@@ -4,11 +4,18 @@
 namespace Beyond\SmartHttp\Kernel\Middleware;
 
 
+use Beyond\Supports\Collection;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class ResponseMiddleware extends BaseMiddleware
 {
+    /**
+     * @var Collection|array|null
+     */
+    private $appendResponse = null;
+
     /**
      * @param RequestInterface $request
      * @param ResponseInterface $response
@@ -16,7 +23,7 @@ abstract class ResponseMiddleware extends BaseMiddleware
      */
     public function handle(RequestInterface $request, ResponseInterface $response)
     {
-        return $response->withHeader($this->getHeaderKey(), $this->getHeaderValue($request));
+        return $this->appendResponse($response)->withHeader($this->getHeaderKey(), $this->getHeaderValue($request));
     }
 
     /**
@@ -32,4 +39,45 @@ abstract class ResponseMiddleware extends BaseMiddleware
             });
         };
     }
+
+    /**
+     * @param Collection|array $appendResponse
+     * @return ResponseMiddleware
+     */
+    public function setAppendResponse($appendResponse):ResponseMiddleware
+    {
+        $this->appendResponse = $appendResponse;
+        return $this;
+    }
+
+    /**
+     * @return array|Collection|null
+     */
+    public function getAppendResponse()
+    {
+        return $this->appendResponse;
+    }
+
+    /**
+     * 追加响应结果
+     *
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     */
+    private function appendResponse(ResponseInterface $response)
+    {
+        $appendResponse = $this->getAppendResponse();
+
+        if (!is_array($appendResponse) && !$appendResponse instanceof Collection) {
+            return $response;
+        }
+
+        if ($appendResponse instanceof Collection) {
+            $appendResponse = $appendResponse->toArray();
+        }
+
+        $result = json_decode($response->getBody()->__toString(), true);
+        return $response->withBody(Utils::streamFor(json_encode(array_merge($result, $appendResponse))));
+    }
+
 }
