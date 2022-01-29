@@ -61,11 +61,17 @@ class ServiceContainer extends Container
         $this->customerConfig = $config;
     }
 
+    /**
+     * @return array
+     */
     public function getConfig()
     {
-        return array_replace_recursive($this->defaultConfig, $this->customerConfig['default']);
+        return array_replace_recursive($this->defaultConfig, $this->customerConfig['default'] ?? []);
     }
 
+    /**
+     * 服务提供者
+     */
     private function registerProviders()
     {
         foreach ($this->getProviders() as $provider) {

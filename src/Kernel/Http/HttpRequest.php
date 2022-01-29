@@ -30,7 +30,7 @@ class HttpRequest
      *
      * @var string
      */
-    public $baseUri;
+    public $baseUri = '';
 
     /**
      * @var Config
