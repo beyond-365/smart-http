@@ -9,9 +9,15 @@ use Beyond\SmartHttp\Kernel\Exceptions\BadRequestException;
 use Beyond\SmartHttp\Kernel\Exceptions\ResourceNotFoundException;
 use Beyond\SmartHttp\Kernel\Exceptions\ServiceInvalidException;
 use Beyond\SmartHttp\Kernel\Exceptions\ValidationException;
+use Beyond\SmartHttp\Kernel\ServiceContainer;
 
 class Demo extends DemoClient
 {
+    public function __construct(ServiceContainer $app)
+    {
+        parent::__construct($app);
+        $this->setBaseUri('http://legend.api/');
+    }
 
     /**
      * @return array|string
@@ -23,35 +29,19 @@ class Demo extends DemoClient
      */
     public function location()
     {
-        $this->baseUri = 'http://legend.api';
-        $url = '/api/coupon/select';
+        $url = '/admin/v2/order/remark-list';
 
         $response = $this->request($url, 'POST', [
             'json'    => [
-                "goods_list"     => [
-                    [
-                        "activity_id" => 168,
-                        "goods_id"    => 132,
-                        "fee"         => 3000,
-                        "number"      => 1,
-                        "cart_id"     => "1929",
-                        "amount"      => "3000",
-                        "discount"    => 150
-                    ]
-                ],
-                "current_coupon" => [
-                    [
-                        "type"        => "checked",
-                        "stock_id"    => "1229300000000382",
-                        "coupon_code" => "211013152213000000007583027"
-                    ]
-                ]
+                'order_sn' => 190082258710528
             ],
             'headers' => [
-                'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsdW1lbi1qd3QiLCJzdWIiOjYwNiwiaWF0IjoxNjM0Mzc2OTI5LCJleHAiOjE2MzQzODQxMjl9.gqewPyIi4NOc_nAm9lKJ8_ZeKs-PCO_L1yel8991kng',
+                'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsdW1lbi1qd3QiLCJzdWIiOjIxLCJpYXQiOjE2NDM1MjY3MDMsImV4cCI6MTY0MzU0NDcwM30.ORep-clESsHwaPV8vLHnR55IBn2Z_ZS6oL4KlqqTkXE',
             ]
         ]);
 
-        return $this->unwrapResponse($response);
+        $responseHeader = $response->getHeaders();
+        $result =  $this->unwrapResponse($response);
+        return compact('result', 'responseHeader');
     }
 }

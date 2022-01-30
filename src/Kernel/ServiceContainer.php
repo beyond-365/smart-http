@@ -33,7 +33,14 @@ class ServiceContainer extends Container
      *
      * @var array
      */
-    protected $defaultConfig = [];
+    protected $defaultConfig = [
+        'http' => [
+            'timeout'      => 3.0,
+            'debug'        => true,
+            'logging'      => true,
+            'log_template' => '{"sdk_uri":"{url}","code":"{code}","request":"{req_body}","body":"{res_body}","error":"{error}"}'
+        ],
+    ];
 
     /**
      * 自定义配置
@@ -66,7 +73,7 @@ class ServiceContainer extends Container
      */
     public function getConfig()
     {
-        return array_replace_recursive($this->defaultConfig, $this->customerConfig['default'] ?? []);
+        return array_replace_recursive($this->defaultConfig, $this->customerConfig);
     }
 
     /**

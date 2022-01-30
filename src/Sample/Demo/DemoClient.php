@@ -7,7 +7,6 @@ namespace Beyond\SmartHttp\Sample\Demo;
 use Beyond\SmartHttp\Kernel\BaseClient;
 use Beyond\SmartHttp\Kernel\Exceptions\AuthorizationException;
 use Beyond\SmartHttp\Kernel\Exceptions\BadRequestException;
-use Beyond\SmartHttp\Kernel\Exceptions\InvalidArgumentException;
 use Beyond\SmartHttp\Kernel\Exceptions\ResourceNotFoundException;
 use Beyond\SmartHttp\Kernel\Exceptions\ServiceInvalidException;
 use Beyond\SmartHttp\Kernel\Exceptions\ValidationException;
@@ -25,13 +24,14 @@ abstract class DemoClient extends BaseClient
     /**
      * DemoClient constructor.
      * @param ServiceContainer $app
-     * @throws InvalidArgumentException
      */
     public function __construct(ServiceContainer $app)
     {
         parent::__construct($app);
 
-        $this->setBaseUri($app->offsetGet('config')->get('host', ''));
+        if ($host = $app->offsetGet('config')->get('host', '')) {
+            $this->setBaseUri($host);
+        }
     }
 
     public function registerMiddleware()

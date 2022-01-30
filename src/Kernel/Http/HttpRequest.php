@@ -8,7 +8,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\ResponseInterface;
-use Beyond\SmartHttp\Kernel\Exceptions\InvalidArgumentException;
 use Beyond\SmartHttp\Kernel\ServiceContainer;
 use Beyond\SmartHttp\Traits\SmartHttpRequest;
 
@@ -30,7 +29,7 @@ class HttpRequest
      *
      * @var string
      */
-    public $baseUri = '';
+    private $baseUri = '';
 
     /**
      * @var Config
@@ -162,20 +161,4 @@ class HttpRequest
         return Middleware::log($this->app->getLog(), $formatter);
     }
 
-    /**
-     *  设置 basic_uri
-     *
-     * @param $baseUri
-     * @return $this
-     * @throws InvalidArgumentException
-     */
-    public function setBaseUri($baseUri)
-    {
-        if (empty($baseUri)) {
-            throw new InvalidArgumentException('host is expected');
-        }
-
-        $this->baseUri = $baseUri;
-        return $this;
-    }
 }
