@@ -5,6 +5,7 @@ namespace Beyond\SmartHttp\Kernel\Middleware;
 
 
 use Beyond\Supports\Collection;
+use GuzzleHttp\Psr7\AppendStream;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -12,9 +13,9 @@ use Psr\Http\Message\ResponseInterface;
 abstract class ResponseMiddleware extends BaseMiddleware
 {
     /**
-     * @var Collection|array|null
+     * @var Collection|array|callable|null
      */
-    private $appendResponse = null;
+    private $appendResponseData = null;
 
     /**
      * @param RequestInterface $request
@@ -41,21 +42,21 @@ abstract class ResponseMiddleware extends BaseMiddleware
     }
 
     /**
-     * @param Collection|array $appendResponse
+     * @param Collection|array|callable|null $appendResponse
      * @return ResponseMiddleware
      */
     public function setAppendResponse($appendResponse):ResponseMiddleware
     {
-        $this->appendResponse = $appendResponse;
+        $this->appendResponseData = $appendResponse;
         return $this;
     }
 
     /**
-     * @return array|Collection|null
+     * @return array|Collection|\Closure|null
      */
     public function getAppendResponse()
     {
-        return $this->appendResponse;
+        return $this->appendResponseData;
     }
 
     /**
@@ -66,18 +67,25 @@ abstract class ResponseMiddleware extends BaseMiddleware
      */
     private function appendResponse(ResponseInterface $response)
     {
-        $appendResponse = $this->getAppendResponse();
+        $appendResponseData = $this->getAppendResponse();
+        if ($appendResponseData instanceof \Closure) {
+            $response = $appendResponseData($response);
+        } else {
+            if (!is_array($appendResponseData) && !$appendResponseData instanceof Collection) {
+                return $response;
+            }
 
-        if (!is_array($appendResponse) && !$appendResponse instanceof Collection) {
-            return $response;
+            if ($appendResponseData instanceof Collection) {
+                $appendResponseData = $appendResponseData->toArray();
+            }
+
+            $composed = new AppendStream();
+            $stream = Utils::streamFor(json_encode(array_merge(json_decode($response->getBody()->__toString(), true), $appendResponseData), JSON_UNESCAPED_UNICODE));
+            $composed->addStream($stream);
+            $response = $response->withBody($composed);
         }
 
-        if ($appendResponse instanceof Collection) {
-            $appendResponse = $appendResponse->toArray();
-        }
-
-        $result = json_decode($response->getBody()->__toString(), true);
-        return $response->withBody(Utils::streamFor(json_encode(array_merge($result, $appendResponse))));
+        return $response;
     }
 
 }
