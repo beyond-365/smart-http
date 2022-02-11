@@ -29,14 +29,10 @@ class Demo extends DemoClient
      */
     public function location()
     {
-        $url = '/admin/v2/order/remark-list';
-
-        $response = $this->request($url, 'POST', [
+        $response = $this->request('/admin/login', 'POST', [
             'json'    => [
-                'order_sn' => 190082258710528
-            ],
-            'headers' => [
-                'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsdW1lbi1qd3QiLCJzdWIiOjIxLCJpYXQiOjE2NDM1MjY3MDMsImV4cCI6MTY0MzU0NDcwM30.ORep-clESsHwaPV8vLHnR55IBn2Z_ZS6oL4KlqqTkXE',
+                "account" => "debug",
+                "password" =>  "debug"
             ]
         ]);
 

@@ -10,6 +10,7 @@ use GuzzleHttp\Middleware;
 use Psr\Http\Message\ResponseInterface;
 use Beyond\SmartHttp\Kernel\ServiceContainer;
 use Beyond\SmartHttp\Traits\SmartHttpRequest;
+use Psr\Log\LoggerInterface;
 
 class HttpRequest
 {
@@ -158,7 +159,9 @@ class HttpRequest
             $this->app->offsetGet('config')->get('http.log_template', MessageFormatter::CLF)
         );
 
-        return Middleware::log($this->app->getLog(), $formatter);
+        if ($this->app->getLog() instanceof LoggerInterface) {
+            return Middleware::log($this->app->getLog(), $formatter);
+        }
     }
 
 }

@@ -36,9 +36,9 @@ class ServiceContainer extends Container
     protected $defaultConfig = [
         'http' => [
             'timeout'      => 3.0,
-            'debug'        => true,
+            'debug'        => false,
             'logging'      => true,
-            'log_template' => '{"sdk_uri":"{url}","code":"{code}","request":"{req_body}","body":"{res_body}","error":"{error}"}'
+            'log_template' => '{"sdk_uri":"{uri}","code":"{code}","request":"{req_body}","body":"{res_body}","error":"{error}"}'
         ],
     ];
 

@@ -5,8 +5,8 @@ return [
 
     'http' => [
         'timeout'      => 3.0,
-        'debug'        => true,
-        'logging'      => false,
-        'log_template' => '{"sdk_uri":"{url}","code":"{code}","request":"{req_body}","body":"{res_body}","error":"{error}"}'
+        'debug'        => false,
+        'logging'      => true,
+        'log_template' => '{"sdk_uri":"{uri}","code":"{code}","request":"{req_body}","body":"{res_body}","error":"{error}"}'
     ],
 ];
