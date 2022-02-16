@@ -96,8 +96,8 @@ class HttpRequest
      */
     public function getClient()
     {
-        if (!($this->httpClient instanceof ClientInterface)) {
-            $this->httpClient = $this->app->offsetExists('http_client') ? $this->app['http_client'] : new Client();
+        if (!$this->httpClient instanceof ClientInterface) {
+            $this->httpClient = $this->app->offsetExists('http_client') ? $this->app['http_client'] : $this->getHttpClient();
         }
 
         return $this->httpClient;
